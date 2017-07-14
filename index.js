@@ -16,6 +16,7 @@ function HtmlWebpackPlugin (options) {
     filename: 'index.html',
     hash: false,
     inject: true,
+    injectTypes: [ 'scripts', 'styles' ],
     compile: true,
     favicon: false,
     minify: false,
@@ -505,13 +506,19 @@ HtmlWebpackPlugin.prototype.generateAssetTags = function (assets) {
       }
     });
   }
-  // Add styles to the head
-  head = head.concat(styles);
-  // Add scripts to body or head
-  if (this.options.inject === 'head') {
-    head = head.concat(scripts);
-  } else {
-    body = body.concat(scripts);
+
+  if(this.options.injectTypes.indexOf('styles') !== -1) {
+    // Add styles to the head
+    head = head.concat(styles);
+  }
+
+  if(this.options.injectTypes.indexOf('scripts') !== -1) {
+    // Add scripts to body or head
+    if (this.options.inject === 'head') {
+      head = head.concat(scripts);
+    } else {
+      body = body.concat(scripts);
+    }
   }
   return {head: head, body: body};
 };
